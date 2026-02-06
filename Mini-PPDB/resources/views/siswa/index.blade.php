@@ -120,10 +120,10 @@
                 <td>{{ $s->asal_sekolah }}</td>
                 <td>{{ $s->nilai_ujian }}</td>
                 <td>
-                    @if ($s->status == 'lulus')
-                        <span style="color: green; font-weight: bold;">Lulus</span>
+                    @if ($s->status == 'Confirm')
+                        <span style="color: green; font-weight: bold;">Confirmasi</span>
                     @else
-                        <span style="color: red; font-weight: bold;">Tidak Lulus</span>
+                        <span style="color: orange; font-weight: bold;">Pending</span>
                     @endif
                 </td>
                 <td>

@@ -27,23 +27,27 @@ class SiswaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-     $request->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'asal_sekolah' => 'required|string|max:255',
-            'nilai_ujian'  => 'required|integer|min:0|max:100',
-        ]);
+ public function store(Request $request)
+{
+    $request->validate([
+        'nama_lengkap' => 'required|string|max:255',
+        'asal_sekolah' => 'required|string|max:255',
+        'nilai_ujian'  => 'required|integer|min:0|max:100',
+    ]);
 
-        Siswa::create([
-              'nama_lengkap' => $request->nama_lengkap,
-            'asal_sekolah' => $request->asal_sekolah,
-            'nilai_ujian'  => $request->nilai_ujian,
-            'status'       => 'Pending',
-        ]);
-        
-        return redirect()->route('ppdb.index');
-    }
+    // LOGIKA STATUS
+    $status = $request->nilai_ujian >= 75 ? 'Confirm' : 'Pending';
+
+    Siswa::create([
+        'nama_lengkap' => $request->nama_lengkap,
+        'asal_sekolah' => $request->asal_sekolah,
+        'nilai_ujian'  => $request->nilai_ujian,
+        'status'       => $status,
+    ]);
+
+    return redirect()->route('ppdb.index')->with('success', 'Data berhasil ditambahkan');
+}
+
 
     public function edit(string $id)
     {
@@ -54,28 +58,29 @@ class SiswaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-         $request->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'asal_sekolah' => 'required|string|max:255',
-            'nilai_ujian'  => 'required|integer|min:0|max:100',
-        ]);
+  public function update(Request $request, string $id)
+{
+    $request->validate([
+        'nama_lengkap' => 'required|string|max:255',
+        'asal_sekolah' => 'required|string|max:255',
+        'nilai_ujian'  => 'required|integer|min:0|max:100',
+    ]);
 
+    $siswa = Siswa::findOrFail($id);
 
-        $siswa = Siswa::findOrFail($id);
+    // LOGIKA STATUS (SAMA DENGAN STORE)
+    $status = $request->nilai_ujian >= 75 ? 'Confirm' : 'Pending';
 
-        Siswa::create([
-              'nama_lengkap' => $request->nama_lengkap,
-            'asal_sekolah' => $request->asal_sekolah,
-            'nilai_ujian'  => $request->nilai_ujian,
-            'status'       => 'Pending',
-        ]);
+    $siswa->update([
+        'nama_lengkap' => $request->nama_lengkap,
+        'asal_sekolah' => $request->asal_sekolah,
+        'nilai_ujian'  => $request->nilai_ujian,
+        'status'       => $status,
+    ]);
 
+    return redirect()->route('ppdb.index')->with('success', 'Data berhasil diupdate');
+}
 
-        return redirect()->route('ppdb.index')->with('success','good');
-        
-    }
 
     /**
      * Remove the specified resource from storage.

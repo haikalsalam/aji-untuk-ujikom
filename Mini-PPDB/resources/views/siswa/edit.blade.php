@@ -99,11 +99,11 @@
 
         <label>Status</label>
         <select name="status" required>
-            <option value="lulus" {{ $siswa->status == 'lulus' ? 'selected' : '' }}>
-                Lulus
+            <option value="lulus" {{ $siswa->status == 'Confirm' ? 'selected' : '' }}>
+              Confirm
             </option>
-            <option value="tidak_lulus" {{ $siswa->status == 'tidak_lulus' ? 'selected' : '' }}>
-                Tidak Lulus
+            <option value="tidak_lulus" {{ $siswa->status == 'pending' ? 'selected' : '' }}>
+               Pending
             </option>
         </select>
 
